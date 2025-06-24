@@ -1,1 +1,968 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>DegenStrategy - Yoink $OINK, Make Pigs Fly! 🐷🎰</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(180deg, #1a1a1a, #333);
+            color: #fff;
+            text-align: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+			
+        }
+		body.no-scroll {
+    overflow: hidden;
+}
+        header {
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 2px solid #00ff00;
+        }
+        h1 {
+            font-size: 3.5em;
+            margin: 0;
+            color: #00ff00;
+            text-shadow: 2px 2px #ff4500;
+        }
+        h2 {
+            font-size: 2em;
+            color: #00ff00;
+        }
+        h3 {
+            font-size: 1.5em;
+            color: #00ff00;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .hero {
+            padding: 50px 20px;
+            position: relative;
+        }
+        .pig-animation {
+            position: absolute;
+            top: 20%;
+            left: -100px;
+            animation: fly 15s infinite linear;
+        }
+        @keyframes fly {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(100vw); }
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #00ff00;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 10px;
+            margin: 20px;
+            font-size: 1.2em;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .cta-button:hover {
+            transform: scale(1.1);
+            background: #ff4500;
+        }
+        .faq {
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .faq h2 {
+            color: #00ff00;
+            margin-bottom: 30px;
+        }
+        .faq-item {
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+        }
+        .faq-item h3 {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+        footer {
+            padding: 20px;
+            background: #111;
+            font-size: 0.9em;
+            color: #888;
+        }
+        footer a {
+            color: #00ff00;
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5em; }
+            p { font-size: 1em; }
+            .cta-button { padding: 10px 20px; font-size: 1em; }
+        }
+		
+		
+		 #reserves {
+            font-weight: bold;
+            color: #00ff88;
+            font-size: 1.2em;
+        }
+        
+        .loading {
+            color: #ffaa00;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #ff4444;
+            font-weight: bold;
+        }
+        
+        table {
+			width: 550px;
+            max-width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        
+        th {
+            background-color: green;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background-color: #333;
+        }
+        
+        .amount {
+            font-family: monospace;
+            color: #00ff88;
+        }
+        
+        .timestamp {
+            color: #aaa;
+        }
+        
+        .refresh-btn {
+            background-color: #ff6b35;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #e55a2b;
+        }
+
+        /* Popup Styles */
+/* Popup Styles */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    overflow: auto; /* Allow scrolling if content overflows */
+}
+
+.popup-content {
+    position: relative; /* Changed from fixed to relative for better positioning */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #1a1a1a, #2a4a2a);
+    border: 3px solid #00ff00;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh; /* Limit height to avoid overflow */
+    overflow-y: auto; /* Allow scrolling within popup if content is too tall */
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+    animation: popupAppear 0.3s ease-out;
+}
+
+        @keyframes popupAppear {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .popup-title {
+            color: #00ff00;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px #ff4500;
+        }
+
+        .popup-pig {
+            font-size: 3em;
+            margin: 10px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .popup-section {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .popup-address {
+            background: #000;
+            border: 1px solid #00ff88;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 1.1em;
+            color: #00ff88;
+            margin: 15px 0;
+            word-break: break-all;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .popup-address:hover {
+            background: #003300;
+            transform: scale(1.02);
+        }
+
+        .popup-warning {
+            color: #ff4500;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin: 20px 0;
+            text-shadow: 1px 1px #000;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #ff4500;
+            font-size: 2em;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .popup-close:hover {
+            color: #ff6600;
+            transform: scale(1.2);
+        }
+
+        .minimum-amount {
+            color: #00ff88;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .copy-btn {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #ff4500;
+            transform: scale(1.1);
+        }
+
+        .copy-feedback {
+            color: #00ff88;
+            font-size: 0.9em;
+            margin-top: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .copy-feedback.show {
+            opacity: 1;
+        }
+		
+		
+		 .networks-container {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 50, 0, 0.3));
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 900px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .networks-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .networks-title {
+            font-size: 2.2em;
+            color: #00ff00;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px #ff4500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .networks-subtitle {
+            font-size: 1.3em;
+            color: #00ff88;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .networks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .network-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ff00;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .network-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .network-item:hover::before {
+            left: 100%;
+        }
+
+        .network-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: #00ff88;
+            box-shadow: 0 5px 20px rgba(0, 255, 0, 0.4);
+        }
+
+        .network-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 8px;
+            border-radius: 50%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .network-name {
+            font-size: 0.9em;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .networks-footer {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #00ff00;
+            font-size: 1.1em;
+            color: #00ff88;
+            position: relative;
+            z-index: 1;
+        }
+
+        .degen-text {
+            color: #ff4500;
+            font-weight: bold;
+        }
+
+        .pig-emoji {
+            font-size: 1.5em;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+        }
+
+        @media (max-width: 600px) {
+            .networks-grid {
+                grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+                gap: 15px;
+            }
+            
+            .networks-title {
+                font-size: 1.8em;
+            }
+            
+            .networks-subtitle {
+                font-size: 1.1em;
+            }
+            
+            .network-icon {
+                width: 35px;
+                height: 35px;
+            }
+        }
+	.evm-networks {
+            display: flex;
+            justify-content: center; /* Center icons horizontally */
+            align-items: center; /* Center icons vertically */
+            gap: 12px; /* Space between logos */
+            padding: 10px;
+            overflow-x: auto; /* Horizontal scroll for small screens */
+            white-space: nowrap;
+            background-color: transparent; /* Transparent background */
+            max-width: 100%;
+        }
+
+        .evm-networks img {
+            width: 24px; /* Uniform size */
+            height: 24px;
+            object-fit: contain;
+            border-radius: 50%; /* Circular logos */
+            background-color: #fff; /* White background for logo clarity */
+            padding: 2px; /* Slight padding for better appearance */
+        }
+
+        .evm-networks img:hover {
+            transform: scale(1.2); /* Zoom on hover */
+            transition: transform 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DegenStrategy ($DEGEN) - LIVE on PulseChain</h1>
+        <p>Buys all the $OINK to Make Pigs Fly! 🐷🎰</p>
+		        <div class="pig-animation"><h1>🐷🚀</h1></div>
+    </header>
+
+    <section class="hero">
+	  <button class="cta-button" onclick="openBuyPopup()">Click to Buy $DEGEN (YOLO Time! 😎)</button>
+	  </br>
+        <h2>Welcome to the Degen Casino! 🐷🎰</h2>
+
+        <p>
+            DegenStrategy ($DEGEN) is a degen twist on MicroStrategy, </br>BUYING & HODLING <strong>Piggy Bank ($OINK)</strong> </br>to build reserves and make the pigs fly!
+        </p>
+        <p>
+            $OINK's a dank memecoin with Bitcoin-style scarcity (21B fixed supply), community governance via the Degen Council, and a treasury piggy bank for public goods. </br></br>DegenStrategy's stacking $OINK to boost the herd's vibes—join the game, motherpiggers! 🐽
+        </p>
+       
+        <a href="https://degenstrategy.github.io/interface/" target="_blank" class="cta-button">Stake Your PulseChain Bag, earn $DEGEN</a>
+      
+		 <a href="https://t.me/plsDEGEN" class="cta-button">Join DEGEN Telegram</a>
+		
+		 <h3>DegenStrategy Reserves 🐷💰</h3>
+        <p> <span id="reserves"></span> </p>
+		<center><div id="allBuys"></div></center>
+    </section>
+
+    <!-- Buy DEGEN Popup -->
+    <div id="buyPopup" class="popup-overlay" onclick="closeBuyPopup(event)">
+        <div class="popup-content" onclick="event.stopPropagation()">
+            <button class="popup-close" onclick="closeBuyPopup()">&times;</button>
+            
+            <div class="popup-pig">🐷💰</div>
+            <h2 class="popup-title">YOLO INTO $DEGEN!</h2>
+            
+            <div class="popup-section">
+                <h3 style="color: #00ff00; margin-top: 0;">Send Your Tokens To:</h3>
+                <div class="popup-address" onclick="copyAddress()" id="walletAddress">
+                    0x50A1c629f3f8681d14f2e46D0BC49C8A52Ac91A2
+                    <button class="copy-btn" onclick="copyAddress()">COPY</button>
+                </div>
+                <div class="copy-feedback" id="copyFeedback">Address copied to clipboard! 🐷</div>
+				
+				    <div class="minimum-amount">💸 Minimum: $25 USD 💸</div>
+				
+				
+    
+        <p class="networks-subtitle">    <p style="margin: 10px 0; color: #ccc;">You can Send ANY token on ANY network!</br>
+	  <div class="evm-networks">  <center>
+        <!-- Ethereum -->
+        <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" alt="Ethereum" title="Ethereum">
+		   <img src="https://www.base.org/favicon.ico" alt="Base" title="Base">
+		   
+		    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11145.png" alt="PulseChain" title="PulseChain">
+			
+			  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png" alt="BSC" title="Binance Smart Chain">
+        <!-- Polygon -->
+        <img src="https://assets.coingecko.com/coins/images/4713/large/polygon.png" alt="Polygon" title="Polygon">
+        <!-- Avalanche -->
+        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png" alt="Avalanche" title="Avalanche">
+        <!-- Base (Using placeholder as Base logo may not be on CoinGecko; sourced from official site if available) -->
+     
+        <!-- PulseChain (No CoinGecko listing; using placeholder) -->
+       
+        <!-- Binance Smart Chain (BSC) -->
+      
+        <!-- Optimism -->
+        <img src="https://assets.coingecko.com/coins/images/25244/large/Optimism.png" alt="Optimism" title="Optimism">
+        <!-- Arbitrum -->
+        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png" alt="Arbitrum" title="Arbitrum">
+        <!-- Fantom -->
+        <img src="https://assets.coingecko.com/coins/images/4001/large/Fantom_round.png" alt="Fantom" title="Fantom">
+        <!-- Cronos -->
+        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" alt="Cronos" title="Cronos">
+        <!-- Gnosis Chain -->
+</center>
+    </div></br>
+	
+            &#10084; All funds will be used to buy OINK and stash them in the decentralized treasury reserves!
+			</div>
+
+            <div class="popup-section">
+            
+	You will receive $DEGEN according to market price at the time of your transfer! </br>
+	You will receive your tokens within up to 12hours. </p>
+        
+       
+        
+        <div class="networks-footer">
+           <p>If you wish to buy directly and instantly from the contract using PLS, PLSX or INC, you can do so <a href="">HERE</a></p>
+        </div>
+    </div>
+	
+
+            <div class="popup-warning">
+                ⚠️ Risk what you can yeet; no stonks - just oinks!</br>
+				
+            </div>
+
+            <p style="color: #00ff88; font-size: 1.2em; margin: 20px 0;">
+                Join us for the degen ride! 🐷🚀
+            </p>
+
+            <div style="font-size: 0.9em; color: #888; margin-top: 20px;">
+                Not financial advice • DYOR • Might moon or rug to zero ... </br> Degen Chaos Guaranteed! 🎰
+            </div>
+        </div>
+    </div>
+
+    <section class="faq">
+        <h2>FAQ - Wen Pigs Fly? 🐷</h2>
+        <div class="faq-item">
+            <h3>What's DegenStrategy, Fam?</h3>
+            <p>DegenStrategy ($DEGEN) is a degen twist on MicroStrategy, that BUYs and HODLs <strong>Piggy Bank ($OINK)</strong> to build reserves and make the pigs fly! </p>
+        </div>
+		<div class="faq-item">
+    <h3>Why Copy MicroStrategy?</h3>
+    <p>MicroStrategy's business was flopping hard—until they started stacking Bitcoin and became the best-performing stock (<a href="https://www.strategy.com/charts" target="_blank">see</a>)! We're copying what works best, yoinking $OINK to build reserves like they did with BTC. DegenStrategy's copying all the dankest models to create a moon bomb - a viral degen explosion to make the pigs fly! No moon promises tho, just degen chaos and entertainment! 🐷🎰</p>
+</div>
+        <div class="faq-item">
+            <h3>What's $OINK and Why Stack It?</h3>
+            <p>Piggy Bank ($OINK) is a memecoin with Bitcoin-style scarcity (21B fixed supply), governance via the Degen Council, and a treasury piggy bank for public goods. DegenStrategy's stacking $OINK to support the herd's dreams—join the game, motherpiggers! 🐽</p>
+        </div>
+        <div class="faq-item">
+            <h3>How Do I Join the Degen Casino?</h3>
+            <p>Mine $DEGEN for free with your PulseChain tokens (PLS, PLSX, INC, HEX, etc.) or grab $DEGEN on PulseX. It's a wild ride—only risk what you can yeet, fam! 🐷🎰</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>What's the Risk, Motherpiggers?</h3>
+            <p>Crypto's a casino—$OINK and $DEGEN might soar or flop to zero! Bugs, tech fails, or regs could wreck us. No guarantees, fam—HODL wisely! 🐷🔥</p>
+        </div>
+        <div class="faq-item">
+            <h3>Is DegenStrategy a Fancy Stock Like MicroStrategy?</h3>
+            <p>Nah, bro, we're not suits in boardrooms! DegenStrategy's a decentralized, high-risk protocol running on $OINK-fueled chaos. No stonks—just a wild memecoin casino where you YOLO at your own risk! 🐷🚀</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 DegenStrategy. Not financial advice—crypto's a casino! Only risk what you can yeet. Might soar or flop to zero! 🐷🔥 <!--Follow us on <a href="https://x.com">X</a> | Join the herd at <a href="https://oink.com">Piggy Bank</a>!</p>-->
+    </footer>
+
+<script>
+  // Configuration - Update these with your actual values
+        const CONFIG = {
+            // ERC-20 Token Contract Address
+            tokenContract: '0xFAaC6a85C3e123AB2CF7669B1024f146cFef0b38', // Replace with actual token contract address
+            
+            // Address to check balance for
+            walletAddress: '0xD540b89Ee52F81bE921Aa856bb2808A96BA9E3a1', // Replace with actual wallet address
+            
+            // RPC endpoint (example for Ethereum mainnet)
+            rpcEndpoint: 'https://rpc-pulsechain.g4mm4.io', // Replace with your RPC endpoint
+            
+            // URL for buy data
+            buyDataUrl: 'https://pulsedao.org/api2/oinkBuys.txt', // Replace with actual URL
+			
+			tokenPairAddress: '', // Replace with actual pair address
+            
+            // Token decimals (usually 18 for most ERC-20 tokens)
+            tokenDecimals: 18
+        };
+
+        // ERC-20 balanceOf function signature
+        const BALANCE_OF_SIGNATURE = '0x70a08231';
+
+        // Convert Wei to readable format
+        function formatTokenAmount(wei, decimals = 18) {
+            const divisor = Math.pow(10, decimals);
+            const amount = parseFloat(wei) / divisor;
+            return Math.round(amount).toLocaleString('en-US');
+        }
+
+        function formatUSD(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        // Convert timestamp to readable date
+        function formatTimestamp(timestamp) {
+            const date = new Date(parseInt(timestamp) * 1000);
+            return date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Fetch token price from DexScreener
+        async function fetchTokenPrice() {
+            try {
+                const response = await fetch(`https://api.dexscreener.com/latest/dex/pairs/pulsechain/${CONFIG.tokenPairAddress}`);
+                const data = await response.json();
+                
+                if (data.pair && data.pair.priceUsd) {
+                    return parseFloat(data.pair.priceUsd);
+                } else {
+                    throw new Error('Price data not available');
+                }
+            } catch (error) {
+                console.error('Error fetching token price:', error);
+                throw error;
+            }
+        }
+        function encodeAddress(address) {
+            // Remove 0x prefix if present, then pad to 32 bytes (64 hex chars)
+            const cleanAddress = address.replace('0x', '').toLowerCase();
+            return '0'.repeat(24) + cleanAddress;
+        }
+
+        // Fetch token balance using RPC call (returns raw Wei)
+        async function fetchTokenBalanceRaw() {
+            try {
+                const data = encodeAddress(CONFIG.walletAddress);
+                const payload = {
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method: 'eth_call',
+                    params: [{
+                        to: CONFIG.tokenContract,
+                        data: BALANCE_OF_SIGNATURE + data
+                    }, 'latest']
+                };
+
+                const response = await fetch(CONFIG.rpcEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                
+                if (result.error) {
+                    throw new Error(result.error.message);
+                }
+
+                // Return raw hex result converted to decimal string
+                return parseInt(result.result, 16).toString();
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+                throw error;
+            }
+        }
+
+        // Fetch token balance using RPC call (returns formatted string)
+        async function fetchTokenBalance() {
+            try {
+                const balanceWei = await fetchTokenBalanceRaw();
+                return formatTokenAmount(balanceWei, CONFIG.tokenDecimals);
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+                throw error;
+            }
+        }
+
+        // Fetch buy data from URL
+        async function fetchBuyData() {
+            try {
+                const response = await fetch(CONFIG.buyDataUrl);
+                const text = await response.text();
+                
+                // Parse CSV-like data
+                const lines = text.trim().split('\n');
+                const buys = lines.map(line => {
+                    const [plsSpent, amountReceived, timestamp] = line.split(',');
+                    return {
+                        plsSpent: parseFloat(plsSpent),
+                        amountReceived: parseFloat(amountReceived),
+                        timestamp: parseInt(timestamp)
+                    };
+                });
+
+                return buys;
+            } catch (error) {
+                console.error('Error fetching buy data:', error);
+                throw error;
+            }
+        }
+
+        // Display buy data in table format
+        function displayBuyData(buys) {
+            const container = document.getElementById('allBuys');
+            
+            if (!buys || buys.length === 0) {
+                container.innerHTML = '<p class="error">No buy data available</p>';
+                return;
+            }
+
+            let html = `
+                <h4>Recent Buy-backs (${buys.length} transactions)</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PLS Spent</th>
+                            <th>Amount Received</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            buys.forEach(buy => {
+                html += `
+                    <tr>
+                        <td class="amount">${formatTokenAmount(buy.plsSpent)} PLS</td>
+                        <td class="amount">${formatTokenAmount(buy.amountReceived)} OINK</td>
+                        <td class="timestamp">${formatTimestamp(buy.timestamp)}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Load all data
+        async function loadData() {
+            const reservesElement = document.getElementById('reserves');
+            const buysElement = document.getElementById('allBuys');
+            
+            // Reset loading states
+            reservesElement.innerHTML = '<span class="loading">Loading...</span>';
+            buysElement.innerHTML = '<span class="loading">Loading buy data...</span>';
+
+            try {
+                // Fetch balance, price, and buy data in parallel
+                const [balanceWei, tokenPrice, buys] = await Promise.all([
+                    fetchTokenBalanceRaw(),
+                    fetchTokenPrice(),
+                    fetchBuyData()
+                ]);
+
+                // Calculate formatted balance and USD value
+                const balanceFormatted = formatTokenAmount(balanceWei, CONFIG.tokenDecimals);
+                const balanceFloat = parseFloat(balanceWei) / Math.pow(10, CONFIG.tokenDecimals);
+                const usdValue = balanceFloat * tokenPrice;
+
+                // Update reserves display with both token amount and USD value
+                reservesElement.innerHTML = `${balanceFormatted} OINK <span style="color: #00ff88;">(${formatUSD(usdValue)})</span>`;
+
+                // Update buys display
+                displayBuyData(buys);
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                
+                // Show error states
+                if (reservesElement.innerHTML.includes('Loading')) {
+                    reservesElement.innerHTML = '<span class="error">Error loading balance</span>';
+                }
+                
+                if (buysElement.innerHTML.includes('Loading')) {
+                    buysElement.innerHTML = '<span class="error">Error loading buy data</span>';
+                }
+            }
+        }
+
+        // Auto-refresh every 120 seconds
+        function startAutoRefresh() {
+            setInterval(loadData, 120000);
+        }
+
+// Popup functions
+function openBuyPopup() {
+    const popup = document.getElementById('buyPopup');
+    popup.style.display = 'block';
+    document.body.classList.add('no-scroll'); // Add class to prevent background scrolling
+}
+
+function closeBuyPopup(event) {
+    // Close if clicking the overlay or explicitly calling the function
+    if (!event || event.target === document.getElementById('buyPopup')) {
+        const popup = document.getElementById('buyPopup');
+        popup.style.display = 'none';
+        document.body.classList.remove('no-scroll'); // Restore scrolling
+    }
+}
+
+// Close popup with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeBuyPopup();
+    }
+});
+
+        function copyAddress() {
+            const address = '0x50A1c629f3f8681d14f2e46D0BC49C8A52Ac91A2';
+            
+            // Try to copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(address).then(() => {
+                    showCopyFeedback();
+                }).catch(() => {
+                    // Fallback method
+                    fallbackCopy(address);
+                });
+            } else {
+                // Fallback method for older browsers
+                fallbackCopy(address);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopyFeedback();
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function showCopyFeedback() {
+            const feedback = document.getElementById('copyFeedback');
+            feedback.classList.add('show');
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 2000);
+        }
+
+        // Close popup with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeBuyPopup();
+            }
+        });
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            startAutoRefresh();
+        });
+		
+	
+	 const urlParams = new URLSearchParams(window.location.search);
+            
+            // Check if 'buy' parameter exists (regardless of value)
+            if (urlParams.has('buy')) {
+                openBuyPopup();
+            }
+</script>
+</body>
+</html>
