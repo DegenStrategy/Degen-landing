@@ -767,7 +767,7 @@
         // Fetch buy data from URL
         async function fetchBuyData() {
             try {
-                const response = await fetch(CONFIG.buyDataUrl);
+                const response = await fetch(CONFIG.buyDataUrl, { cache: "no-cache" });
                 const text = await response.text();
                 
                 // Parse CSV-like data
