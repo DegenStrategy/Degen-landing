@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<script>
+(function() {
+    const currentPath = window.location.href;
+    if (currentPath.includes('?r=')) {
+        const rValue = currentPath.split('?r=')[1];
+        if (rValue) {
+            window.location.href = `https://degenstrategy.github.io/interface/?r=${rValue}`;
+        }
+    }
+})();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	 <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -764,24 +775,24 @@
             }
         }
 
-        // Fetch buy data from URL
-        async function fetchBuyData() {
-            try {
-                const response = await fetch(CONFIG.buyDataUrl, { cache: "no-cache" });
-                const text = await response.text();
-                
-                // Parse CSV-like data
-                const lines = text.trim().split('\n');
-                const buys = lines.map(line => {
-                    const [plsSpent, amountReceived, timestamp] = line.split(',');
-                    return {
-                        plsSpent: parseFloat(plsSpent),
-                        amountReceived: parseFloat(amountReceived),
-                        timestamp: parseInt(timestamp)
-                    };
-                });
+// Fetch buy data from URL
+async function fetchBuyData() {
+    try {
+        const response = await fetch(CONFIG.buyDataUrl, { cache: "no-cache" });
+        const text = await response.text();
+        
+        // Parse CSV-like data
+        const lines = text.trim().split('\n').reverse(); // Reverse the lines array
+        const buys = lines.map(line => {
+            const [plsSpent, amountReceived, timestamp] = line.split(',');
+            return {
+                plsSpent: parseFloat(plsSpent),
+                amountReceived: parseFloat(amountReceived),
+                timestamp: parseInt(timestamp)
+            };
+        });
 
-                return buys;
+        return buys;
             } catch (error) {
                 console.error('Error fetching buy data:', error);
                 throw error;
