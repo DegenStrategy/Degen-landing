@@ -30,6 +30,23 @@
 		body.no-scroll {
     overflow: hidden;
 }
+	      .container {
+    max-width: 95%;
+    margin: 0 auto; /* Centers the container */
+  }
+
+  .contract-address {
+    text-align: center; /* Centers the text */
+    white-space: nowrap; /* Keeps text on one line */
+    font-size: 1.25rem; /* Default size for desktop */
+    font-family: Arial, sans-serif; /* Clean, readable font */
+  }
+
+  @media screen and (max-width: 600px) {
+    .contract-address {
+      font-size: calc(0.7rem + 1vw); /* Scales down for phones */
+    }
+  }
         header {
             padding: 50px 20px;
             background: rgba(0, 0, 0, 0.8);
@@ -539,11 +556,14 @@
 		<center><div id="allBuys"></div></center>
     </br></br><h3>$DEGEN Contract:</h3>
 
-	    <div style="max-width: 95%">
-  <h3 style="text-align: center; white-space: nowrap; font-size: 1.5rem;" font-size:="">
+	    <div class="container">
+  <div class="contract-address">
     0x3E79130ab714E97ee73f86a56a2427bb1A519896
-  </h3>
+  </div>
 </div>
+
+
+	    
 	    
 
 	    
