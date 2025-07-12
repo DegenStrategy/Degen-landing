@@ -893,7 +893,7 @@ async function fetchBuyData() {
                 // Calculate formatted balance and USD value
                 const balanceFormatted = formatTokenAmount(balanceWei, CONFIG.tokenDecimals);
                 const balanceFloat = parseFloat(balanceWei) / Math.pow(10, CONFIG.tokenDecimals);
-                const usdValue = balanceFloat * tokenPrice;
+                const usdValue = Math.round(balanceFloat * tokenPrice);
 
                 // Update reserves display with both token amount and USD value
                 reservesElement.innerHTML = `${balanceFormatted} OINK <span style="color: #00ff88;">(${formatUSD(usdValue)})</span>`;
