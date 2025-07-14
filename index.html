@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<script>
+    <script>
 (function() {
     const currentPath = window.location.href;
     if (currentPath.includes('?r=')) {
@@ -14,8 +14,10 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	 <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>DegenStrategy - Yoink $OINK, Make Pigs Fly! 🐷🎰</title>
+    <!-- Add Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             margin: 0;
@@ -25,28 +27,25 @@
             text-align: center;
             min-height: 100vh;
             overflow-x: hidden;
-			
         }
-		body.no-scroll {
-    overflow: hidden;
-}
-	      .container {
-    max-width: 95%;
-    margin: 0 auto; /* Centers the container */
-  }
-
-  .contract-address {
-    text-align: center; /* Centers the text */
-    white-space: nowrap; /* Keeps text on one line */
-    font-size: 1.25rem; /* Default size for desktop */
-    font-family: Arial, sans-serif; /* Clean, readable font */
-  }
-
-  @media screen and (max-width: 600px) {
-    .contract-address {
-      font-size: calc(0.7rem + 1vw); /* Scales down for phones */
-    }
-  }
+        body.no-scroll {
+            overflow: hidden;
+        }
+        .container {
+            max-width: 95%;
+            margin: 0 auto;
+        }
+        .contract-address {
+            text-align: center;
+            white-space: nowrap;
+            font-size: 1.25rem;
+            font-family: Arial, sans-serif;
+        }
+        @media screen and (max-width: 600px) {
+            .contract-address {
+                font-size: calc(0.7rem + 1vw);
+            }
+        }
         header {
             padding: 50px 20px;
             background: rgba(0, 0, 0, 0.8);
@@ -135,26 +134,21 @@
             p { font-size: 1em; }
             .cta-button { padding: 10px 20px; font-size: 1em; }
         }
-		
-		
-		 #reserves {
+        #reserves {
             font-weight: bold;
             color: #00ff88;
             font-size: 1.2em;
         }
-        
         .loading {
             color: #ffaa00;
             font-style: italic;
         }
-        
         .error {
             color: #ff4444;
             font-weight: bold;
         }
-        
         table {
-			width: 550px;
+            width: 550px;
             max-width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
@@ -162,32 +156,26 @@
             border-radius: 8px;
             overflow: hidden;
         }
-        
         th, td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #444;
         }
-        
         th {
             background-color: green;
             color: white;
             font-weight: bold;
         }
-        
         tr:hover {
             background-color: #333;
         }
-        
         .amount {
             font-family: monospace;
             color: #00ff88;
         }
-        
         .timestamp {
             color: #aaa;
         }
-        
         .refresh-btn {
             background-color: #ff6b35;
             color: white;
@@ -197,67 +185,74 @@
             cursor: pointer;
             margin: 10px 0;
         }
-        
         .refresh-btn:hover {
             background-color: #e55a2b;
         }
-
+        /* Chart Styling */
+#treasuryChartContainer {
+    max-width: 1000px;
+    height: 500px;
+    margin: 40px auto;
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    position: relative; /* Ensure stable positioning */
+}
+#treasuryChart {
+    width: 100% !important;
+    height: 100% !important;
+}
         /* Popup Styles */
-/* Popup Styles */
-.popup-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    overflow: auto; /* Allow scrolling if content overflows */
-}
-
-.popup-content {
-    position: relative; /* Changed from fixed to relative for better positioning */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #1a1a1a, #2a4a2a);
-    border: 3px solid #00ff00;
-    border-radius: 15px;
-    padding: 40px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh; /* Limit height to avoid overflow */
-    overflow-y: auto; /* Allow scrolling within popup if content is too tall */
-    text-align: center;
-    box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
-    animation: popupAppear 0.3s ease-out;
-}
-
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow: auto;
+        }
+        .popup-content {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1a1a, #2a4a2a);
+            border: 3px solid #00ff00;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+            animation: popupAppear 0.3s ease-out;
+        }
         @keyframes popupAppear {
             0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
             100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
-
         .popup-title {
             color: #00ff00;
             font-size: 2.2em;
             margin-bottom: 20px;
             text-shadow: 2px 2px #ff4500;
         }
-
         .popup-pig {
             font-size: 3em;
             margin: 10px 0;
             animation: bounce 2s infinite;
         }
-
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(-10px); }
             60% { transform: translateY(-5px); }
         }
-
         .popup-section {
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid #00ff00;
@@ -265,7 +260,6 @@
             padding: 20px;
             margin: 20px 0;
         }
-
         .popup-address {
             background: #000;
             border: 1px solid #00ff88;
@@ -279,12 +273,10 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-
         .popup-address:hover {
             background: #003300;
             transform: scale(1.02);
         }
-
         .popup-warning {
             color: #ff4500;
             font-weight: bold;
@@ -292,7 +284,6 @@
             margin: 20px 0;
             text-shadow: 1px 1px #000;
         }
-
         .popup-close {
             position: absolute;
             top: 15px;
@@ -304,19 +295,16 @@
             cursor: pointer;
             font-weight: bold;
         }
-
         .popup-close:hover {
             color: #ff6600;
             transform: scale(1.2);
         }
-
         .minimum-amount {
             color: #00ff88;
             font-size: 1.4em;
             font-weight: bold;
             margin: 15px 0;
         }
-
         .copy-btn {
             background: #00ff00;
             color: #000;
@@ -328,12 +316,10 @@
             margin-left: 10px;
             transition: all 0.2s;
         }
-
         .copy-btn:hover {
             background: #ff4500;
             transform: scale(1.1);
         }
-
         .copy-feedback {
             color: #00ff88;
             font-size: 0.9em;
@@ -341,13 +327,10 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-
         .copy-feedback.show {
             opacity: 1;
         }
-		
-		
-		 .networks-container {
+        .networks-container {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 50, 0, 0.3));
             border: 2px solid #00ff00;
             border-radius: 20px;
@@ -359,7 +342,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .networks-container::before {
             content: '';
             position: absolute;
@@ -371,12 +353,10 @@
             animation: pulse 4s ease-in-out infinite;
             pointer-events: none;
         }
-
         @keyframes pulse {
             0%, 100% { opacity: 0.3; transform: scale(1); }
             50% { opacity: 0.7; transform: scale(1.1); }
         }
-
         .networks-title {
             font-size: 2.2em;
             color: #00ff00;
@@ -385,7 +365,6 @@
             position: relative;
             z-index: 1;
         }
-
         .networks-subtitle {
             font-size: 1.3em;
             color: #00ff88;
@@ -393,7 +372,6 @@
             position: relative;
             z-index: 1;
         }
-
         .networks-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -402,7 +380,6 @@
             position: relative;
             z-index: 1;
         }
-
         .network-item {
             display: flex;
             flex-direction: column;
@@ -416,7 +393,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .network-item::before {
             content: '';
             position: absolute;
@@ -427,17 +403,14 @@
             background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.3), transparent);
             transition: left 0.5s;
         }
-
         .network-item:hover::before {
             left: 100%;
         }
-
         .network-item:hover {
             transform: translateY(-5px) scale(1.05);
             border-color: #00ff88;
             box-shadow: 0 5px 20px rgba(0, 255, 0, 0.4);
         }
-
         .network-icon {
             width: 40px;
             height: 40px;
@@ -446,7 +419,6 @@
             position: relative;
             z-index: 1;
         }
-
         .network-name {
             font-size: 0.9em;
             color: #fff;
@@ -455,7 +427,6 @@
             position: relative;
             z-index: 1;
         }
-
         .networks-footer {
             margin-top: 25px;
             padding-top: 20px;
@@ -465,65 +436,56 @@
             position: relative;
             z-index: 1;
         }
-
         .degen-text {
             color: #ff4500;
             font-weight: bold;
         }
-
         .pig-emoji {
             font-size: 1.5em;
             animation: bounce 2s infinite;
         }
-
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(-8px); }
             60% { transform: translateY(-4px); }
         }
-
         @media (max-width: 600px) {
             .networks-grid {
                 grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
                 gap: 15px;
             }
-            
             .networks-title {
                 font-size: 1.8em;
             }
-            
             .networks-subtitle {
                 font-size: 1.1em;
             }
-            
             .network-icon {
                 width: 35px;
                 height: 35px;
             }
         }
-	.evm-networks {
+        .evm-networks {
             display: flex;
-            justify-content: center; /* Center icons horizontally */
-            align-items: center; /* Center icons vertically */
-            gap: 12px; /* Space between logos */
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
             padding: 10px;
-            overflow-x: auto; /* Horizontal scroll for small screens */
+            overflow-x: auto;
             white-space: nowrap;
-            background-color: transparent; /* Transparent background */
+            background-color: transparent;
             max-width: 100%;
         }
-
         .evm-networks img {
-            width: 24px; /* Uniform size */
+            width: 24px;
             height: 24px;
             object-fit: contain;
-            border-radius: 50%; /* Circular logos */
-            background-color: #fff; /* White background for logo clarity */
-            padding: 2px; /* Slight padding for better appearance */
+            border-radius: 50%;
+            background-color: #fff;
+            padding: 2px;
         }
-
         .evm-networks img:hover {
-            transform: scale(1.2); /* Zoom on hover */
+            transform: scale(1.2);
             transition: transform 0.2s ease;
         }
     </style>
@@ -532,55 +494,39 @@
     <header>
         <h1>DegenStrategy ($DEGEN) - LIVE on PulseChain</h1>
         <p>Buys all the $OINK to Make Pigs Fly! 🐷🎰</p>
-		        <div class="pig-animation"><h1>🐷🚀</h1></div>
+        <div class="pig-animation"><h1>🐷🚀</h1></div>
     </header>
 
     <section class="hero">
-	  <button class="cta-button" onclick="openBuyPopup()">Click to Buy $DEGEN (YOLO Time! 😎)</button>
-	  </br>
-        <h2>Welcome to the Degen Casino! 🐷🎰</h2>
+        <button class="cta-button" onclick="openBuyPopup()">Click to Buy $DEGEN (YOLO Time! 😎)</button>
+     
 
-        <p>
-            DegenStrategy ($DEGEN) is a degen twist on MicroStrategy, </br>BUYING & HODLING <strong>Piggy Bank ($OINK)</strong> </br>to build reserves and make the pigs fly!
-        </p>
-        <p>
-            $OINK's a dank memecoin with Bitcoin-style scarcity (21B fixed supply), community governance via the Degen Council, and a treasury piggy bank for public goods. </br></br>DegenStrategy's stacking $OINK to boost the herd's vibes—join the game, motherpiggers! 🐽
-        </p>
-       
-        <a href="https://degenstrategy.github.io/interface/" target="_blank" class="cta-button">Stake Your PulseChain Bag, earn $DEGEN</a>
-      
-		 <a href="https://t.me/plsDEGEN" class="cta-button">Join DEGEN Telegram</a>
-		
-		 <h3>DegenStrategy Reserves 🐷💰</h3>
-        <p> <span id="reserves"></span> </p>
-		<center><div id="allBuys" style="max-height:555px; overflow: auto;"></div></center>
-    </br></br><h3>$DEGEN Contract:</h3>
-
-	    <div class="container">
-  <div class="contract-address">
-    0x3E79130ab714E97ee73f86a56a2427bb1A519896
-  </div>
-</div>
-
-
-	    
-	    
-
-	    
-	    
 
 	
-    
-    </section>
+        <h2>Welcome to the Degen Casino! 🐷🎰</h2>
+        <p>
+            DegenStrategy ($DEGEN) is a degen twist on MicroStrategy, <br>BUYING & HODLING <strong>Piggy Bank ($OINK)</strong> <br>to build reserves and make the pigs fly!
+        </p>
+        <p>
+            $OINK's a dank memecoin with Bitcoin-style scarcity (21B fixed supply), community governance via the Degen Council, and a treasury piggy bank for public goods. <br><br>DegenStrategy's stacking $OINK to boost the herd's vibes—join the game, motherpiggers! 🐽
+        </p>
+        <a href="https://degenstrategy.github.io/interface/" target="_blank" class="cta-button">Stake Your PulseChain Bag, earn $DEGEN</a>
+        <a href="https://t.me/plsDEGEN" class="cta-button">Join DEGEN Telegram</a>
+        <h3>DegenStrategy Reserves 🐷💰</h3>
+        <p><span id="reserves"></span></p>
+        <center><div id="allBuys" style="max-height:555px; overflow: auto;"></div></center>
+        <!-- Add Chart Canvas -->
+        <center><div id="treasuryChartContainer">
+    <canvas id="treasuryChart"></canvas>
+</div></center>
+        <br><br>
 
     <!-- Buy DEGEN Popup -->
     <div id="buyPopup" class="popup-overlay" onclick="closeBuyPopup(event)">
         <div class="popup-content" onclick="event.stopPropagation()">
-            <button class="popup-close" onclick="closeBuyPopup()">&times;</button>
-            
+            <button class="popup-close" onclick="closeBuyPopup()">×</button>
             <div class="popup-pig">🐷💰</div>
             <h2 class="popup-title">YOLO INTO $DEGEN!</h2>
-            
             <div class="popup-section">
                 <h3 style="color: #00ff00; margin-top: 0;">Send Your Tokens To:</h3>
                 <div class="popup-address" onclick="copyAddress()" id="walletAddress">
@@ -588,72 +534,51 @@
                     <button class="copy-btn" onclick="copyAddress()">COPY</button>
                 </div>
                 <div class="copy-feedback" id="copyFeedback">Address copied to clipboard! 🐷</div>
-				
-				    <div class="minimum-amount">💸 Minimum: $25 USD 💸</div>
-				
-				
-    
-        <p class="networks-subtitle">    <p style="margin: 10px 0; color: #ccc;">You can Send ANY token on ANY network!</br>
-	  <div class="evm-networks">  <center>
-        <!-- Ethereum -->
-        <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" alt="Ethereum" title="Ethereum">
-		   <img src="https://www.base.org/favicon.ico" alt="Base" title="Base">
-		   
-		    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11145.png" alt="PulseChain" title="PulseChain">
-			
-			  <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png" alt="BSC" title="Binance Smart Chain">
-        <!-- Polygon -->
-        <img src="https://assets.coingecko.com/coins/images/4713/large/polygon.png" alt="Polygon" title="Polygon">
-        <!-- Avalanche -->
-        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png" alt="Avalanche" title="Avalanche">
-        <!-- Base (Using placeholder as Base logo may not be on CoinGecko; sourced from official site if available) -->
-     
-        <!-- PulseChain (No CoinGecko listing; using placeholder) -->
-       
-        <!-- Binance Smart Chain (BSC) -->
-      
-        <!-- Optimism -->
-        <img src="https://assets.coingecko.com/coins/images/25244/large/Optimism.png" alt="Optimism" title="Optimism">
-        <!-- Arbitrum -->
-        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png" alt="Arbitrum" title="Arbitrum">
-        <!-- Fantom -->
-        <img src="https://assets.coingecko.com/coins/images/4001/large/Fantom_round.png" alt="Fantom" title="Fantom">
-        <!-- Cronos -->
-        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" alt="Cronos" title="Cronos">
-        <!-- Gnosis Chain -->
-</center>
-    </div></br>
-	
-            &#10084; All funds will be used to buy OINK and stash them in the decentralized treasury reserves!
-			</div>
-
-            <div class="popup-section">
-            
-	You will receive $DEGEN according to market price at the time of your transfer! </br>
-	You will receive your tokens within up to 12hours. </p>
-        
-       
-        
-        <div class="networks-footer">
-           <p>If you wish to buy directly and instantly from the contract using PLS, PLSX or INC, you can do so <a href="https://degenstrategy.github.io/interface/go-degen.html">HERE</a></p>
-        </div>
-    </div>
-	
-
-            <div class="popup-warning">
-                ⚠️ Risk what you can yeet; no stonks - just oinks!</br>
-				
-            </div>
-
-            <p style="color: #00ff88; font-size: 1.2em; margin: 20px 0;">
-                Join us for the degen ride! 🐷🚀
-            </p>
-
-            <div style="font-size: 0.9em; color: #888; margin-top: 20px;">
-                Not financial advice • DYOR • Might moon or rug to zero ... </br> Degen Chaos Guaranteed! 🎰
+                <div class="minimum-amount">💸 Minimum: $25 USD 💸</div>
+                <p class="networks-subtitle">
+                    <p style="margin: 10px 0; color: #ccc;">You can Send ANY token on ANY network!<br>
+                <div class="evm-networks">
+                    <center>
+                        <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" alt="Ethereum" title="Ethereum">
+                        <img src="https://www.base.org/favicon.ico" alt="Base" title="Base">
+                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11145.png" alt="PulseChain" title="PulseChain">
+                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png" alt="BSC" title="Binance Smart Chain">
+                        <img src="https://assets.coingecko.com/coins/images/4713/large/polygon.png" alt="Polygon" title="Polygon">
+                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png" alt="Avalanche" title="Avalanche">
+                        <img src="https://assets.coingecko.com/coins/images/25244/large/Optimism.png" alt="Optimism" title="Optimism">
+                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png" alt="Arbitrum" title="Arbitrum">
+                        <img src="https://assets.coingecko.com/coins/images/4001/large/Fantom_round.png" alt="Fantom" title="Fantom">
+                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" alt="Cronos" title="Cronos">
+                    </center>
+                </div><br>
+                ❤ All funds will be used to buy OINK and stash them in the decentralized treasury reserves!
+                </div>
+                <div class="popup-section">
+                    You will receive $DEGEN according to market price at the time of your transfer! <br>
+                    You will receive your tokens within up to 12hours.
+                </div>
+                <div class="networks-footer">
+                    <p>If you wish to buy directly and instantly from the contract using PLS, PLSX or INC, you can do so <a href="https://degenstrategy.github.io/interface/go-degen.html">HERE</a></p>
+                </div>
+                <div class="popup-warning">
+                    ⚠️ Risk what you can yeet; no stonks - just oinks!<br>
+                </div>
+                <p style="color: #00ff88; font-size: 1.2em; margin: 20px 0;">
+                    Join us for the degen ride! 🐷🚀
+                </p>
+                <div style="font-size: 0.9em; color: #888; margin-top: 20px;">
+                    Not financial advice • DYOR • Might moon or rug to zero ... <br> Degen Chaos Guaranteed! 🎰
+                </div>
             </div>
         </div>
-    </div>
+		
+				<h3>$DEGEN Contract on PulseChain:</h3>
+        <div class="container">
+            <div class="contract-address">
+                0x3E79130ab714E97ee73f86a56a2427bb1A519896
+            </div>
+        </div>
+    </section>
 
     <section class="faq">
         <h2>FAQ - Wen Pigs Fly? 🐷</h2>
@@ -661,10 +586,10 @@
             <h3>What's DegenStrategy, Fam?</h3>
             <p>DegenStrategy ($DEGEN) is a degen twist on MicroStrategy, that BUYs and HODLs <strong>Piggy Bank ($OINK)</strong> to build reserves and make the pigs fly! </p>
         </div>
-		<div class="faq-item">
-    <h3>Why Copy MicroStrategy?</h3>
-    <p>MicroStrategy's business was flopping hard—until they started stacking Bitcoin and became the best-performing stock (<a href="https://www.strategy.com/charts" target="_blank">see</a>)! We're copying what works best, yoinking $OINK to build reserves like they did with BTC. DegenStrategy's copying all the dankest models to create a moon bomb - a viral degen explosion to make the pigs fly! No moon promises tho, just degen chaos and entertainment! 🐷🎰</p>
-</div>
+        <div class="faq-item">
+            <h3>Why Copy MicroStrategy?</h3>
+            <p>MicroStrategy's business was flopping hard—until they started stacking Bitcoin and became the best-performing stock (<a href="https://www.strategy.com/charts" target="_blank">see</a>)! We're copying what works best, yoinking $OINK to build reserves like they did with BTC. DegenStrategy's copying all the dankest models to create a moon bomb - a viral degen explosion to make the pigs fly! No moon promises tho, just degen chaos and entertainment! 🐷🎰</p>
+        </div>
         <div class="faq-item">
             <h3>What's $OINK and Why Stack It?</h3>
             <p>Piggy Bank ($OINK) is a memecoin with Bitcoin-style scarcity (21B fixed supply), governance via the Degen Council, and a treasury piggy bank for public goods. DegenStrategy's stacking $OINK to support the herd's dreams—join the game, motherpiggers! 🐽</p>
@@ -673,7 +598,6 @@
             <h3>How Do I Join the Degen Casino?</h3>
             <p>Mine $DEGEN for free with your PulseChain tokens (PLS, PLSX, INC, HEX, etc.) or grab $DEGEN on PulseX. It's a wild ride—only risk what you can yeet, fam! 🐷🎰</p>
         </div>
-
         <div class="faq-item">
             <h3>What's the Risk, Motherpiggers?</h3>
             <p>Crypto's a casino—$OINK and $DEGEN might soar or flop to zero! Bugs, tech fails, or regs could wreck us. No guarantees, fam—HODL wisely! 🐷🔥</p>
@@ -685,34 +609,22 @@
     </section>
 
     <footer>
-        <p>© 2025 DegenStrategy. Not financial advice—crypto's a casino! Only risk what you can yeet. Might soar or flop to zero! 🐷🔥 <!--Follow us on <a href="https://x.com">X</a> | Join the herd at <a href="https://oink.com">Piggy Bank</a>!</p>-->
+        <p>© 2025 DegenStrategy. Not financial advice—crypto's a casino! Only risk what you can yeet. Might soar or flop to zero! 🐷🔥</p>
     </footer>
 
-<script>
-  // Configuration - Update these with your actual values
+    <script>
+        // Configuration
         const CONFIG = {
-            // ERC-20 Token Contract Address
-            tokenContract: '0xFAaC6a85C3e123AB2CF7669B1024f146cFef0b38', // Replace with actual token contract address
-            
-            // Address to check balance for
-            walletAddress: '0xD540b89Ee52F81bE921Aa856bb2808A96BA9E3a1', // Replace with actual wallet address
-            
-            // RPC endpoint (example for Ethereum mainnet)
-            rpcEndpoint: 'https://rpc-pulsechain.g4mm4.io', // Replace with your RPC endpoint
-            
-            // URL for buy data
-            buyDataUrl: 'https://pulsedao.org/api2/oinkBuys.txt', // Replace with actual URL
-			
-			tokenPairAddress: '0xef9ea3d72e28c7140481209190601c085027d6fe', // Replace with actual pair address
-            
-            // Token decimals (usually 18 for most ERC-20 tokens)
+            tokenContract: '0xFAaC6a85C3e123AB2CF7669B1024f146cFef0b38',
+            walletAddress: '0xD540b89Ee52F81bE921Aa856bb2808A96BA9E3a1',
+            rpcEndpoint: 'https://rpc-pulsechain.g4mm4.io',
+            buyDataUrl: 'https://pulsedao.org/api2/oinkBuys.txt',
+            tokenPairAddress: '0xef9ea3d72e28c7140481209190601c085027d6fe',
             tokenDecimals: 18
         };
-
-        // ERC-20 balanceOf function signature
         const BALANCE_OF_SIGNATURE = '0x70a08231';
 
-        // Convert Wei to readable format
+        // Utility Functions
         function formatTokenAmount(wei, decimals = 18) {
             const divisor = Math.pow(10, decimals);
             const amount = parseFloat(wei) / divisor;
@@ -728,7 +640,6 @@
             }).format(amount);
         }
 
-        // Convert timestamp to readable date
         function formatTimestamp(timestamp) {
             const date = new Date(parseInt(timestamp) * 1000);
             return date.toLocaleString('en-US', {
@@ -740,12 +651,16 @@
             });
         }
 
-        // Fetch token price from DexScreener
+        function encodeAddress(address) {
+            const cleanAddress = address.replace('0x', '').toLowerCase();
+            return '0'.repeat(24) + cleanAddress;
+        }
+
+        // Fetch Token Price from DexScreener
         async function fetchTokenPrice() {
             try {
                 const response = await fetch(`https://api.dexscreener.com/latest/dex/pairs/pulsechain/${CONFIG.tokenPairAddress}`);
                 const data = await response.json();
-                
                 if (data.pair && data.pair.priceUsd) {
                     return parseFloat(data.pair.priceUsd);
                 } else {
@@ -756,13 +671,29 @@
                 throw error;
             }
         }
-        function encodeAddress(address) {
-            // Remove 0x prefix if present, then pad to 32 bytes (64 hex chars)
-            const cleanAddress = address.replace('0x', '').toLowerCase();
-            return '0'.repeat(24) + cleanAddress;
+
+        // Fetch Historical PLS Price from CoinGecko
+        async function fetchHistoricalPlsPrice(days = 30) {
+            try {
+                const response = await fetch(
+                    `https://api.coingecko.com/api/v3/coins/pulsechain/market_chart?vs_currency=usd&days=${days}&interval=daily`
+                );
+                const data = await response.json();
+                if (data.prices) {
+                    return data.prices.map(([timestamp, price]) => ({
+                        timestamp: timestamp / 1000,
+                        price: parseFloat(price)
+                    }));
+                } else {
+                    throw new Error('Historical price data not available');
+                }
+            } catch (error) {
+                console.error('Error fetching historical PLS price:', error);
+                throw error;
+            }
         }
 
-        // Fetch token balance using RPC call (returns raw Wei)
+        // Fetch Token Balance
         async function fetchTokenBalanceRaw() {
             try {
                 const data = encodeAddress(CONFIG.walletAddress);
@@ -775,22 +706,15 @@
                         data: BALANCE_OF_SIGNATURE + data
                     }, 'latest']
                 };
-
                 const response = await fetch(CONFIG.rpcEndpoint, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 const result = await response.json();
-                
                 if (result.error) {
                     throw new Error(result.error.message);
                 }
-
-                // Return raw hex result converted to decimal string
                 return parseInt(result.result, 16).toString();
             } catch (error) {
                 console.error('Error fetching balance:', error);
@@ -798,7 +722,6 @@
             }
         }
 
-        // Fetch token balance using RPC call (returns formatted string)
         async function fetchTokenBalance() {
             try {
                 const balanceWei = await fetchTokenBalanceRaw();
@@ -809,39 +732,15 @@
             }
         }
 
-// Fetch buy data from URL
-async function fetchBuyData() {
-    try {
-        const response = await fetch(CONFIG.buyDataUrl, { cache: "no-cache" });
-        const text = await response.text();
-        
-        // Parse CSV-like data
-        const lines = text.trim().split('\n').reverse(); // Reverse the lines array
-        const buys = lines.map(line => {
-            const [plsSpent, amountReceived, timestamp] = line.split(',');
-            return {
-                plsSpent: parseFloat(plsSpent),
-                amountReceived: parseFloat(amountReceived),
-                timestamp: parseInt(timestamp)
-            };
-        });
 
-        return buys;
-            } catch (error) {
-                console.error('Error fetching buy data:', error);
-                throw error;
-            }
-        }
 
-        // Display buy data in table format
+        // Display Buy Data
         function displayBuyData(buys) {
             const container = document.getElementById('allBuys');
-            
             if (!buys || buys.length === 0) {
                 container.innerHTML = '<p class="error">No buy data available</p>';
                 return;
             }
-
             let html = `
                 <h4>Recent Buys (${buys.length} transactions)</h4>
                 <table>
@@ -854,7 +753,6 @@ async function fetchBuyData() {
                     </thead>
                     <tbody>
             `;
-
             buys.forEach(buy => {
                 html += `
                     <tr>
@@ -864,98 +762,273 @@ async function fetchBuyData() {
                     </tr>
                 `;
             });
-
-            html += `
-                    </tbody>
-                </table>
-            `;
-
+            html += `</tbody></table>`;
             container.innerHTML = html;
         }
 
-        // Load all data
-        async function loadData() {
-            const reservesElement = document.getElementById('reserves');
-            const buysElement = document.getElementById('allBuys');
-            
-            // Reset loading states
-            reservesElement.innerHTML = '<span class="loading">Loading...</span>';
-            buysElement.innerHTML = '<span class="loading">Loading buy data...</span>';
+// Aggregate OINK Balance and Estimate OINK Prices
+// Aggregate OINK Balance and Estimate OINK Prices
+// Aggregate OINK Balance and Estimate OINK Prices (unchanged)
 
-            try {
-                // Fetch balance, price, and buy data in parallel
-                const [balanceWei, tokenPrice, buys] = await Promise.all([
-                    fetchTokenBalanceRaw(),
-                    fetchTokenPrice(),
-                    fetchBuyData()
-                ]);
 
-                // Calculate formatted balance and USD value
-                const balanceFormatted = formatTokenAmount(balanceWei, CONFIG.tokenDecimals);
-                const balanceFloat = parseFloat(balanceWei) / Math.pow(10, CONFIG.tokenDecimals);
-                const usdValue = Math.round(balanceFloat * tokenPrice);
+// Fetch Buy Data
+async function fetchBuyData() {
+    try {
+        const response = await fetch(CONFIG.buyDataUrl, { cache: "no-cache" });
+        const text = await response.text();
+        // Parse CSV-like data (no reverse to maintain chronological order)
+        const lines = text.trim().split('\n');
+        const buys = lines.map(line => {
+            const [plsSpent, amountReceived, timestamp] = line.split(',');
+            return {
+                plsSpent: parseFloat(plsSpent),
+                amountReceived: parseFloat(amountReceived),
+                timestamp: parseInt(timestamp)
+            };
+        });
+        return buys;
+    } catch (error) {
+        console.error('Error fetching buy data:', error);
+        throw error;
+    }
+}
 
-                // Update reserves display with both token amount and USD value
-                reservesElement.innerHTML = `${balanceFormatted} OINK <span style="color: #00ff88;">(${formatUSD(usdValue)})</span>`;
+// Aggregate OINK Balance and Estimate OINK Prices
+async function prepareChartData(buys, plsPrices, currentOinkPrice) {
+    let cumulativeOink = 0;
+    const chartData = [];
+    const priceWindow = [];
+    const windowSize = 3;
+    const priceCap = currentOinkPrice * 5;
 
-                // Update buys display
-                displayBuyData(buys);
+    for (const buy of buys) {
+        cumulativeOink += buy.amountReceived;
+        const closestPlsPrice = plsPrices.reduce((prev, curr) =>
+            Math.abs(curr.timestamp - buy.timestamp) < Math.abs(prev.timestamp - buy.timestamp) ? curr : prev
+        );
+        let oinkPrice = (buy.plsSpent / buy.amountReceived) * closestPlsPrice.price;
+        oinkPrice = Math.min(oinkPrice, priceCap);
+        priceWindow.push(oinkPrice);
+        if (priceWindow.length > windowSize) {
+            priceWindow.shift();
+        }
+        const avgOinkPrice = priceWindow.reduce((sum, p) => sum + p, 0) / priceWindow.length;
+        chartData.push({
+            timestamp: buy.timestamp,
+            oink: cumulativeOink / Math.pow(10, CONFIG.tokenDecimals),
+            treasuryValue: (cumulativeOink / Math.pow(10, CONFIG.tokenDecimals)) * avgOinkPrice
+        });
+    }
+    // Add current data point
+    chartData.push({
+        timestamp: Math.floor(Date.now() / 1000),
+        oink: cumulativeOink / Math.pow(10, CONFIG.tokenDecimals),
+        treasuryValue: (cumulativeOink / Math.pow(10, CONFIG.tokenDecimals)) * currentOinkPrice
+    });
+    return chartData;
+}
 
-            } catch (error) {
-                console.error('Error loading data:', error);
-                
-                // Show error states
-                if (reservesElement.innerHTML.includes('Loading')) {
-                    reservesElement.innerHTML = '<span class="error">Error loading balance</span>';
-                }
-                
-                if (buysElement.innerHTML.includes('Loading')) {
-                    buysElement.innerHTML = '<span class="error">Error loading buy data</span>';
+
+
+// Render Chart
+let chartInstance = null;
+async function renderChart() {
+    try {
+        const [buys, plsPrices, currentOinkPrice] = await Promise.all([
+            fetchBuyData(),
+            fetchHistoricalPlsPrice(30),
+            fetchTokenPrice()
+        ]);
+        const chartData = await prepareChartData(buys, plsPrices, currentOinkPrice);
+
+        const labels = chartData.map(d => {
+            const date = new Date(d.timestamp * 1000);
+            return date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
+        });
+
+        const oinkData = chartData.map(d => d.oink);
+        const treasuryValueData = chartData.map(d => d.treasuryValue);
+
+        const ctx = document.getElementById('treasuryChart').getContext('2d');
+        
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'OINK in Treasury',
+                        data: oinkData,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        yAxisID: 'y1',
+                        fill: false
+                    },
+                    {
+                        label: 'Treasury Value (USD)',
+                        data: treasuryValueData,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        yAxisID: 'y2',
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Date', color: '#00ff88' },
+                        ticks: {
+                            color: '#aaa',
+                            maxRotation: 45,
+                            minRotation: 45,
+                            maxTicksLimit: 10,
+                            autoSkip: true
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        position: 'left',
+                        title: { display: true, text: 'OINK Amount', color: '#00ff88' },
+                        ticks: {
+                            color: '#00ff88',
+                            callback: function(value) {
+                                return value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+                            }
+                        },
+                        grid: { borderColor: '#444' }
+                    },
+                    y2: {
+                        type: 'linear',
+                        position: 'right',
+                        title: { display: true, text: 'USD Value', color: '#00ff88' },
+                        ticks: {
+                            color: '#00ff88',
+                            callback: function(value) {
+                                return '$' + value.toLocaleString('en-US', { maximumFractionDigits: 2 });
+                            }
+                        },
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#00ff88' }
+                    },
+                    tooltip: {
+                        mode: 'index', // Show all dataset values at the same x-axis point
+                        intersect: false, // Trigger tooltip even if not directly on a point
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.dataset.yAxisID === 'y1') {
+                                    label += context.parsed.y.toLocaleString('en-US', { maximumFractionDigits: 0 });
+                                } else {
+                                    label += '$' + context.parsed.y.toLocaleString('en-US', { maximumFractionDigits: 2 });
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'index', // Ensure hover/tap triggers all datasets at x-axis point
+                    intersect: false // Allow hover anywhere along the vertical line
                 }
             }
+        });
+    } catch (error) {
+        console.error('Error rendering chart:', error);
+        document.getElementById('treasuryChartContainer').innerHTML = '<p class="error">Error rendering chart</p>';
+    }
+}
+
+// Load All Data
+async function loadData() {
+    const reservesElement = document.getElementById('reserves');
+    const buysElement = document.getElementById('allBuys');
+    reservesElement.innerHTML = '<span class="loading">Loading...</span>';
+    buysElement.innerHTML = '<span class="loading">Loading buy data...</span>';
+
+    try {
+        const [balanceWei, tokenPrice, buys] = await Promise.all([
+            fetchTokenBalanceRaw(),
+            fetchTokenPrice(),
+            fetchBuyData()
+        ]);
+        const balanceFormatted = formatTokenAmount(balanceWei, CONFIG.tokenDecimals);
+        const balanceFloat = parseFloat(balanceWei) / Math.pow(10, CONFIG.tokenDecimals);
+        const usdValue = Math.round(balanceFloat * tokenPrice);
+        reservesElement.innerHTML = `${balanceFormatted} OINK <span style="color: #00ff88;">(${formatUSD(usdValue)})</span>`;
+        displayBuyData(buys);
+        // Only render chart if not already rendered
+        if (!chartInstance) {
+            await renderChart();
+        } else {
+            // Update chart data without re-rendering to avoid jitter
+            const [plsPrices, currentOinkPrice] = await Promise.all([
+                fetchHistoricalPlsPrice(30),
+                fetchTokenPrice()
+            ]);
+            const chartData = await prepareChartData(buys, plsPrices, currentOinkPrice);
+            const labels = chartData.map(d => {
+                const date = new Date(d.timestamp * 1000);
+                return date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
+            });
+            const oinkData = chartData.map(d => d.oink);
+            const treasuryValueData = chartData.map(d => d.treasuryValue);
+            chartInstance.data.labels = labels;
+            chartInstance.data.datasets[0].data = oinkData;
+            chartInstance.data.datasets[1].data = treasuryValueData;
+            chartInstance.update('none'); // Silent update to avoid animation jitter
         }
+    } catch (error) {
+        console.error('Error loading data:', error);
+        if (reservesElement.innerHTML.includes('Loading')) {
+            reservesElement.innerHTML = '<span class="error">Error loading balance</span>';
+        }
+        if (buysElement.innerHTML.includes('Loading')) {
+            buysElement.innerHTML = '<span class="error">Error loading buy data</span>';
+        }
+    }
+}
 
         // Auto-refresh every 120 seconds
         function startAutoRefresh() {
             setInterval(loadData, 120000);
         }
 
-// Popup functions
-function openBuyPopup() {
-    const popup = document.getElementById('buyPopup');
-    popup.style.display = 'block';
-    document.body.classList.add('no-scroll'); // Add class to prevent background scrolling
-}
+        // Popup Functions
+        function openBuyPopup() {
+            const popup = document.getElementById('buyPopup');
+            popup.style.display = 'block';
+            document.body.classList.add('no-scroll');
+        }
 
-function closeBuyPopup(event) {
-    // Close if clicking the overlay or explicitly calling the function
-    if (!event || event.target === document.getElementById('buyPopup')) {
-        const popup = document.getElementById('buyPopup');
-        popup.style.display = 'none';
-        document.body.classList.remove('no-scroll'); // Restore scrolling
-    }
-}
-
-// Close popup with Escape key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeBuyPopup();
-    }
-});
+        function closeBuyPopup(event) {
+            if (!event || event.target === document.getElementById('buyPopup')) {
+                const popup = document.getElementById('buyPopup');
+                popup.style.display = 'none';
+                document.body.classList.remove('no-scroll');
+            }
+        }
 
         function copyAddress() {
             const address = '0x50A1c629f3f8681d14f2e46D0BC49C8A52Ac91A2';
-            
-            // Try to copy to clipboard
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(address).then(() => {
                     showCopyFeedback();
                 }).catch(() => {
-                    // Fallback method
                     fallbackCopy(address);
                 });
             } else {
-                // Fallback method for older browsers
                 fallbackCopy(address);
             }
         }
@@ -969,14 +1042,12 @@ document.addEventListener('keydown', function(event) {
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-            
             try {
                 document.execCommand('copy');
                 showCopyFeedback();
             } catch (err) {
                 console.error('Could not copy text: ', err);
             }
-            
             document.body.removeChild(textArea);
         }
 
@@ -988,26 +1059,21 @@ document.addEventListener('keydown', function(event) {
             }, 2000);
         }
 
-        // Close popup with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeBuyPopup();
             }
         });
 
-        // Initialize when page loads
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
             startAutoRefresh();
-        });
-		
-	
-	 const urlParams = new URLSearchParams(window.location.search);
-            
-            // Check if 'buy' parameter exists (regardless of value)
+            const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('buy')) {
                 openBuyPopup();
             }
-</script>
+        });
+    </script>
 </body>
 </html>
