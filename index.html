@@ -18,6 +18,7 @@
     <title>DegenStrategy - Yoink $OINK, Make Pigs Fly! 🐷🎰</title>
     <!-- Add Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body {
             margin: 0;
@@ -488,6 +489,15 @@
             transform: scale(1.2);
             transition: transform 0.2s ease;
         }
+#piggyPartyCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
     </style>
 </head>
 <body>
@@ -516,9 +526,14 @@
         <p><span id="reserves"></span></p>
         <center><div id="allBuys" style="max-height:555px; overflow: auto;"></div></center>
         <!-- Add Chart Canvas -->
-        <center><div id="treasuryChartContainer">
+        <center>
+		
+		<div id="treasuryChartContainer" style="position: relative;">
     <canvas id="treasuryChart"></canvas>
-</div></center>
+    <canvas id="piggyPartyCanvas"></canvas>
+</div>
+		
+		</center>
         <br><br>
 
     <!-- Buy DEGEN Popup -->
@@ -829,8 +844,7 @@ async function prepareChartData(buys, plsPrices, currentOinkPrice) {
 }
 
 
-
-// Render Chart
+// Render Chart (reverted to previous working version with tooltip)
 let chartInstance = null;
 async function renderChart() {
     try {
@@ -920,8 +934,8 @@ async function renderChart() {
                         labels: { color: '#00ff88' }
                     },
                     tooltip: {
-                        mode: 'index', // Show all dataset values at the same x-axis point
-                        intersect: false, // Trigger tooltip even if not directly on a point
+                        mode: 'index',
+                        intersect: false,
                         callbacks: {
                             label: function(context) {
                                 let label = context.dataset.label || '';
@@ -939,8 +953,8 @@ async function renderChart() {
                     }
                 },
                 interaction: {
-                    mode: 'index', // Ensure hover/tap triggers all datasets at x-axis point
-                    intersect: false // Allow hover anywhere along the vertical line
+                    mode: 'index',
+                    intersect: false
                 }
             }
         });
@@ -949,6 +963,131 @@ async function renderChart() {
         document.getElementById('treasuryChartContainer').innerHTML = '<p class="error">Error rendering chart</p>';
     }
 }
+
+// Global Piggy Party Animation
+(function() {
+    const canvas = document.getElementById('piggyPartyCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    // Particle class
+    class Particle {
+        constructor(x, y, shape) {
+            this.x = x;
+            this.y = y;
+            this.shape = shape;
+            this.size = Math.random() * 20 + 20; // 20-40px
+            this.velocityX = (Math.random() - 0.5) * 8; // Random horizontal speed
+            this.velocityY = (Math.random() - 0.5) * 8; // Random vertical speed
+            this.color = ['#00ff00', '#ff4500', '#00ff88', '#ffaa00'][Math.floor(Math.random() * 4)];
+            this.life = 100; // Frames to live (~2 seconds at 60fps)
+            this.rotation = Math.random() * 360; // Random rotation
+            this.rotationSpeed = (Math.random() - 0.5) * 5; // Rotation speed
+        }
+
+        update() {
+            this.x += this.velocityX;
+            this.y += this.velocityY;
+            this.velocityY += 0.1; // Gravity effect
+            this.rotation += this.rotationSpeed;
+            this.life--;
+        }
+
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate((this.rotation * Math.PI) / 180);
+            ctx.fillStyle = this.color;
+            ctx.font = `${this.size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.shape, 0, 0);
+            ctx.restore();
+        }
+    }
+
+    // Animation loop
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles = particles.filter(p => p.life > 0); // Remove expired particles
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animate); // Keep loop running
+    }
+
+    // Resize canvas
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Trigger animation
+    let lastInteractionAnimationTime = 0;
+    const animationCooldown = 2000; // 2 seconds between interaction-based animations
+    function triggerPiggyParty(x, y) {
+        const now = Date.now();
+        if (now - lastInteractionAnimationTime < animationCooldown) return;
+        lastInteractionAnimationTime = now;
+
+        const shapes = ['🐷', '💸', 'OINK', '🎰', '🚀', '💲DEGEN', '🤑', '💰', '🎲'];
+        const particleCount = 20;
+        for (let i = 0; i < particleCount; i++) {
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            // Ensure particles spawn within canvas bounds
+            const boundedX = Math.max(0, Math.min(x, canvas.width));
+            const boundedY = Math.max(0, Math.min(y, canvas.height));
+            particles.push(new Particle(boundedX, boundedY, shape));
+        }
+    }
+
+    // Automatic animation at random intervals (5-30 seconds)
+    function scheduleAutoAnimation() {
+        const randomInterval = Math.random() * (30000 - 5000) + 5000; // 5-30 seconds
+        setTimeout(() => {
+            const x = Math.random() * canvas.width; // Random x position
+            const y = Math.random() * canvas.height; // Random y position
+            const shapes = ['🐷', '💸', 'OINK', '🎰', '🚀'];
+            const particleCount = 20;
+            for (let i = 0; i < particleCount; i++) {
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                particles.push(new Particle(x, y, shape));
+            }
+            scheduleAutoAnimation(); // Schedule next animation
+        }, randomInterval);
+    }
+    scheduleAutoAnimation(); // Start the first automatic animation
+
+    // Start animation loop
+    animate();
+
+    // Attach listeners to interactive elements
+    const interactiveSelectors = [
+        '.cta-button',
+        '#treasuryChart',
+        'a[href]',
+        '.popup-address',
+        '.copy-btn'
+    ];
+    interactiveSelectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(element => {
+            element.addEventListener('mouseover', (event) => {
+                triggerPiggyParty(event.clientX, event.clientY);
+            });
+            element.addEventListener('click', (event) => {
+                triggerPiggyParty(event.clientX, event.clientY);
+            });
+            element.addEventListener('touchstart', (event) => {
+                event.preventDefault(); // Prevent default touch behavior
+                const touch = event.touches[0];
+                triggerPiggyParty(touch.clientX, touch.clientY);
+            });
+        });
+    });
+})();
 
 // Load All Data
 async function loadData() {
@@ -1075,5 +1214,6 @@ async function loadData() {
             }
         });
     </script>
+<canvas id="piggyPartyCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100;"></canvas>
 </body>
 </html>
