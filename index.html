@@ -1027,7 +1027,7 @@ async function renderChart() {
 
     // Trigger animation
     let lastInteractionAnimationTime = 0;
-    const animationCooldown = 2000; // 2 seconds between interaction-based animations
+    const animationCooldown = 4269; // 2 seconds between interaction-based animations
     function triggerPiggyParty(x, y) {
         const now = Date.now();
         if (now - lastInteractionAnimationTime < animationCooldown) return;
@@ -1106,7 +1106,7 @@ async function loadData() {
         const balanceFloat = parseFloat(balanceWei) / Math.pow(10, CONFIG.tokenDecimals);
         const usdValue = Math.round(balanceFloat * tokenPrice);
         reservesElement.innerHTML = `${balanceFormatted} OINK <span style="color: #00ff88;">(${formatUSD(usdValue)})</span>`;
-        displayBuyData(buys);
+        displayBuyData(buys.reverse());
         // Only render chart if not already rendered
         if (!chartInstance) {
             await renderChart();
