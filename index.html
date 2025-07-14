@@ -969,6 +969,8 @@ async function renderChart() {
     const canvas = document.getElementById('piggyPartyCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
+    let isTabVisible = document.visibilityState === 'visible';
+    let autoAnimationTimeout = null;
 
     // Particle class
     class Particle {
@@ -1037,7 +1039,6 @@ async function renderChart() {
         const particleCount = 20;
         for (let i = 0; i < particleCount; i++) {
             const shape = shapes[Math.floor(Math.random() * shapes.length)];
-            // Ensure particles spawn within canvas bounds
             const boundedX = Math.max(0, Math.min(x, canvas.width));
             const boundedY = Math.max(0, Math.min(y, canvas.height));
             particles.push(new Particle(boundedX, boundedY, shape));
@@ -1046,8 +1047,9 @@ async function renderChart() {
 
     // Automatic animation at random intervals (5-30 seconds)
     function scheduleAutoAnimation() {
+        if (!isTabVisible) return; // Skip if tab is not visible
         const randomInterval = Math.random() * (30000 - 5000) + 5000; // 5-30 seconds
-        setTimeout(() => {
+        autoAnimationTimeout = setTimeout(() => {
             const x = Math.random() * canvas.width; // Random x position
             const y = Math.random() * canvas.height; // Random y position
             const shapes = ['🐷', '💸', 'OINK', '🎰', '🚀', '💲', '🤑', '💰', '🎲'];
@@ -1059,10 +1061,23 @@ async function renderChart() {
             scheduleAutoAnimation(); // Schedule next animation
         }, randomInterval);
     }
-    scheduleAutoAnimation(); // Start the first automatic animation
 
-    // Start animation loop
+    // Handle tab visibility
+    document.addEventListener('visibilitychange', () => {
+        isTabVisible = document.visibilityState === 'visible';
+        if (isTabVisible) {
+            scheduleAutoAnimation(); // Resume animations when tab is visible
+        } else {
+            clearTimeout(autoAnimationTimeout); // Clear pending animations when tab is hidden
+            particles = []; // Clear particles to avoid rendering on tab switch
+        }
+    });
+
+    // Start animation loop and initial scheduler
     animate();
+    if (isTabVisible) {
+        scheduleAutoAnimation();
+    }
 
     // Attach listeners to interactive elements
     const interactiveSelectors = [
@@ -1088,7 +1103,6 @@ async function renderChart() {
         });
     });
 })();
-
 // Load All Data
 async function loadData() {
     const reservesElement = document.getElementById('reserves');
