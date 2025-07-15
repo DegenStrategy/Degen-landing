@@ -1130,7 +1130,7 @@ async function loadData() {
                 fetchHistoricalPlsPrice(30),
                 fetchTokenPrice()
             ]);
-            const chartData = await prepareChartData(buys, plsPrices, currentOinkPrice);
+            const chartData = await prepareChartData(buys.reverse(), plsPrices, currentOinkPrice);
             const labels = chartData.map(d => {
                 const date = new Date(d.timestamp * 1000);
                 return date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
