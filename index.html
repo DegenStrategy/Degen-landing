@@ -687,12 +687,6 @@ Send ANY token from ANY network into the potâ€”pick your lockup later, degens! ð
             tokenDecimals: 18
         };
 	
-	const address = document.getElementById("walletAddress").innerText.split("COPY")[0].trim();
- navigator.clipboard.writeText(address).then(() => {
- const feedback = document.getElementById("copyFeedback");
- feedback.style.display = "block";
- setTimeout(() => { feedback.style.display = "none"; }, 2000);
- });
  
 
  // Function to close popup
