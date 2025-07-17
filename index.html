@@ -249,6 +249,7 @@
             margin: 10px 0;
             animation: bounce 2s infinite;
         }
+		
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(-10px); }
@@ -536,56 +537,105 @@
 		</center>
         <br><br>
 
-    <!-- Buy DEGEN Popup -->
-    <div id="buyPopup" class="popup-overlay" onclick="closeBuyPopup(event)">
-        <div class="popup-content" onclick="event.stopPropagation()">
-            <button class="popup-close" onclick="closeBuyPopup()">×</button>
-            <div class="popup-pig">🐷💰</div>
-            <h2 class="popup-title">YOLO INTO $DEGEN!</h2>
-            <div class="popup-section">
-                <h3 style="color: #00ff00; margin-top: 0;">Send Your Tokens To:</h3>
-                <div class="popup-address" onclick="copyAddress()" id="walletAddress">
-                    0x50A1c629f3f8681d14f2e46D0BC49C8A52Ac91A2
-                    <button class="copy-btn" onclick="copyAddress()">COPY</button>
-                </div>
-                <div class="copy-feedback" id="copyFeedback">Address copied to clipboard! 🐷</div>
-                <div class="minimum-amount">💸 Minimum: $25 USD 💸</div>
-                <p class="networks-subtitle">
-                    <p style="margin: 10px 0; color: #ccc;">You can Send ANY token on ANY network!<br>
-                <div class="evm-networks">
-                    <center>
-                        <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" alt="Ethereum" title="Ethereum">
-                        <img src="https://www.base.org/favicon.ico" alt="Base" title="Base">
-                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11145.png" alt="PulseChain" title="PulseChain">
-                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png" alt="BSC" title="Binance Smart Chain">
-                        <img src="https://assets.coingecko.com/coins/images/4713/large/polygon.png" alt="Polygon" title="Polygon">
-                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png" alt="Avalanche" title="Avalanche">
-                        <img src="https://assets.coingecko.com/coins/images/25244/large/Optimism.png" alt="Optimism" title="Optimism">
-                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png" alt="Arbitrum" title="Arbitrum">
-                        <img src="https://assets.coingecko.com/coins/images/4001/large/Fantom_round.png" alt="Fantom" title="Fantom">
-                        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" alt="Cronos" title="Cronos">
-                    </center>
-                </div><br>
-                ❤ All funds will be used to buy OINK and stash them in the decentralized treasury reserves!
-                </div>
-                <div class="popup-section">
-                    You will receive $DEGEN according to market price at the time of your transfer! <br>
-                    You will receive your tokens within up to 12hours.
-                </div>
-                <div class="networks-footer">
-                    <p>If you wish to buy directly and instantly from the contract using PLS, PLSX or INC, you can do so <a href="https://degenstrategy.github.io/interface/go-degen.html">HERE</a></p>
-                </div>
-                <div class="popup-warning">
-                    ⚠️ Risk what you can yeet; no stonks - just oinks!<br>
-                </div>
-                <p style="color: #00ff88; font-size: 1.2em; margin: 20px 0;">
-                    Join us for the degen ride! 🐷🚀
-                </p>
-                <div style="font-size: 0.9em; color: #888; margin-top: 20px;">
-                    Not financial advice • DYOR • Might moon or rug to zero ... <br> Degen Chaos Guaranteed! 🎰
-                </div>
-            </div>
-        </div>
+<div id="buyPopup" class="popup-overlay" onclick="closeBuyPopup(event)">
+ <div class="popup-content" onclick="event.stopPropagation()">
+ <button class="popup-close" onclick="closeBuyPopup()">×</button>
+ <div class="popup-pig">🐷💰</div>
+ <h2 class="popup-title">YOLO INTO THE $DEGEN CASINO!</h2>
+ <div class="popup-section">
+ <h3 style="color: #00ff00; margin-top: 0;">Send Your Chips To:</h3>
+ <div class="popup-address" onclick="copyAddress()" id="walletAddress">
+ 0x50A1c629f3f8681d14f2e46D0BC49C8A52Ac91A2
+ <button class="copy-btn" onclick="copyAddress()">COPY</button>
+ </div>
+ <div class="copy-feedback" id="copyFeedback">Address copied to clipboard! 🐷</div>
+ <div class="price-display" id="usdToDegen">1 USD = Loading $DEGEN...</div>
+ <div class="minimum-amount">💸 Min Bet: $25 USD 💸</div>
+ <div class="miner-options">
+ <ul>
+ <center>
+ <li><span class="option-duration">3 Month miner</span> (+6% Bonus Tokens - Spin the Slots!)</li>
+ <li><span class="option-duration">1 Year miner</span> (+6% Bonus Tokens - Double Down!)</li>
+ <li><span class="option-duration">10 Years miner</span> (+34% Bonus Tokens - Jackpot Vibes!)</li>
+ </center></ul>
+ </div>
+ <p class="networks-subtitle" style="margin: 10px 0; color: #ccc;">
+Send ANY token from ANY network into the pot—pick your lockup later, degens! 🐽💰<br>
+ </p>
+ <div class="evm-networks">
+ <center>
+ <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" alt="Ethereum" title="Ethereum">
+ <img src="https://www.base.org/favicon.ico" alt="Base" title="Base">
+ <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11145.png" alt="PulseChain" title="PulseChain">
+ <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png" alt="BSC" title="Binance Smart Chain">
+ <img src="https://assets.coingecko.com/coins/images/4713/large/polygon.png" alt="Polygon" title="Polygon">
+ <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png" alt="Avalanche" title="Avalanche">
+ <img src="https://assets.coingecko.com/coins/images/25244/large/Optimism.png" alt="Optimism" title="Optimism">
+ <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/11841.png" alt="Arbitrum" title="Arbitrum">
+ <img src="https://assets.coingecko.com/coins/images/4001/large/Fantom_round.png" alt="Fantom" title="Fantom">
+ <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" alt="Cronos" title="Cronos">
+ </center>
+ </div>
+ <p style="color: #00ff88; margin: 10px 0;">❤ All chips fuel the $OINK buys that are stashed in the decentralized treasury reserves!</p>
+ </div>
+ <div class="popup-section">
+ <p>Grab a <strong>YOLO Miner</strong>—receive locked $DEGEN to secure the protocol and earn mining rewards! It’s not an investment, fam, just your ticket to spin the protocol slots. Longer bets = bigger rewards, but it’s all soar or bust! 🐷🎰</p>
+ <p>Your claim drops <a href="https://degenstrategy.github.io/interface/go-degen.html" target="_blank">here</a>, usually within 12 hours—patience, motherpiggers!</p>
+ </div>
+ <div class="networks-footer">
+ <p>Instant action? Buy direct with PLS, PLSX, or INC <a href="https://degenstrategy.github.io/interface/go-degen.html">HERE</a>, or hit the DEX <a href="https://app.piteas.io/#/swap?inputCurrency=PLS&outputCurrency=0x3E79130ab714E97ee73f86a2427bb1A519896" target="_blank">HERE</a>!</p>
+ </div>
+ <div class="popup-warning">
+ ⚠️ Risk what you can yeet—no stonks, just oinks! Might soar or bust to zero—pure degen chaos! 🐷🔥
+ </div>
+ <p style="color: #00ff88; font-size: 1.2em; margin: 20px 0;">
+ Roll the dice and join the degen ride! 🐷🚀
+ </p>
+ <div style="font-size: 0.9em; color: #888; margin-top: 20px;">
+ Not financial advice • DYOR • Casino rules apply—might moon or rug! 🎰
+ </div>
+ </div>
+</div>
+<style>
+
+
+ .price-display {
+ color: #00ff88;
+ font-size: 1.1em;
+ margin: 10px 0;
+ font-weight: bold;
+ }
+ .minimum-amount {
+ color: #ff4500;
+ font-size: 1.2em;
+ margin: 10px 0;
+ }
+ .miner-options { 
+ text-align: left;
+ margin: 20px 0;
+ }
+ .miner-options ul {
+ list-style: none;
+ padding: 0;
+ }
+ .miner-options li {
+ background: #222;
+ padding: 10px;
+ margin: 5px 0;
+ border-radius: 5px;
+ color: #fff;
+ transition: transform 0.2s;
+ }
+ .miner-options li:hover {
+ transform: scale(1.05);
+ background: #333;
+ }
+ .option-duration {
+ font-weight: bold;
+ color: #00ff00;
+ }
+
+</style>
 		
 				<h3>$DEGEN Contract on PulseChain:</h3>
         <div class="container">
@@ -628,8 +678,7 @@
     </footer>
 
     <script>
-        // Configuration
-        const CONFIG = {
+	        const CONFIG = {
             tokenContract: '0xFAaC6a85C3e123AB2CF7669B1024f146cFef0b38',
             walletAddress: '0xD540b89Ee52F81bE921Aa856bb2808A96BA9E3a1',
             rpcEndpoint: 'https://rpc-pulsechain.g4mm4.io',
@@ -637,6 +686,54 @@
             tokenPairAddress: '0xef9ea3d72e28c7140481209190601c085027d6fe',
             tokenDecimals: 18
         };
+	
+	const address = document.getElementById("walletAddress").innerText.split("COPY")[0].trim();
+ navigator.clipboard.writeText(address).then(() => {
+ const feedback = document.getElementById("copyFeedback");
+ feedback.style.display = "block";
+ setTimeout(() => { feedback.style.display = "none"; }, 2000);
+ });
+ 
+
+ // Function to close popup
+ function closeBuyPopup(event) {
+ document.getElementById("buyPopup").style.display = "none";
+ }
+
+ // Simulated DexScreener API call for $DEGEN price (replace with real API)
+ async function fetchDegenPrice() {
+ try {
+ // Simulated data - Replace with actual DexScreener API calls
+ // Pair 1: $DEGEN/USD (e.g., hypothetical pair with USD price)
+ const pair1Response = await fetch('https://api.dexscreener.com/latest/dex/pairs/pulsechain/'+CONFIG.tokenPairAddress); // $DEGEN/USD pair
+ const pair1Data = await pair1Response.json();
+ const usdPrice = pair1Data.pairs[0].priceUsd; // Simulated USD price
+
+ // Pair 2: $DEGEN/PLS ratio (e.g., hypothetical pair with no USD price)
+ const pair2Response = await fetch('https://api.dexscreener.com/latest/dex/pairs/pulsechain/0x3029aa801176f6904e2b6c7527334c215eaf1d8f'); // $DEGEN/PLS pair
+ const pair2Data = await pair2Response.json();
+ const ratio = pair2Data.pairs[0].priceNative; // Simulated ratio (e.g., $DEGEN per PLS)
+
+console.log("ratio is " +ratio)
+console.log("use price is " +usdPrice)
+ const degenUsdPrice = usdPrice ; // Placeholder PLS/USD price - fetch this dynamically too if needed
+ const degenPerUsd = (1 / (usdPrice*ratio))
+console.log("degen per usd is " + degenPerUsd) 
+
+ // Update display
+ document.getElementById("usdToDegen").innerText = `1 USD ≈ ${Math.round(degenPerUsd).toLocaleString()} $DEGEN`;
+ } catch (error) {
+ console.error("Error fetching price:", error);
+ document.getElementById("usdToDegen").innerText = "1 USD = Error loading $DEGEN...";
+ }
+ }
+
+ // Update price every minute
+ setInterval(fetchDegenPrice, 60000);
+ fetchDegenPrice(); // Initial fetch
+ 
+        // Configuration
+
         const BALANCE_OF_SIGNATURE = '0x70a08231';
 
         // Utility Functions
