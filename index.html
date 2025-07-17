@@ -1187,10 +1187,9 @@ async function renderChart() {
                 triggerPiggyParty(event.clientX, event.clientY);
             });
             element.addEventListener('touchstart', (event) => {
-                event.preventDefault(); // Prevent default touch behavior
-                const touch = event.touches[0];
-                triggerPiggyParty(touch.clientX, touch.clientY);
-            });
+    const touch = event.touches[0];
+    triggerPiggyParty(touch.clientX, touch.clientY);
+});
         });
     });
 })();
